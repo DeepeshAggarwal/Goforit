@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Publish Subscribe message</title>
+	<script src="./socket.io.js"></script>
+	<script>
+		function startSocket() {
+		    document.getElementById('pendingComments').innerHTML = "";
+		    document.getElementById('pendingPosts').innerHTML = "";
+			alert(new Date());
+			var socket = io('http://localhost:8810');
+			  socket.on('news', function (data) {
+
+				  if (data.type === 'T') {
+					    document.getElementById('postTrustFactor').innerHTML = data.timeStamp;
+				  } else if (data.type === 'C') {
+					    document.getElementById('pendingComments').innerHTML = data.timeStamp;
+				  } else if (data.type === 'P') {
+					    document.getElementById('pendingPosts').innerHTML = data.timeStamp;
+				  }
+			    document.getElementById('placeTrustFactor').innerHTML = data.trustFactor;
+			  });
+		}
+	</script>
+</head>
+<body onload="startSocket()">
+<form method="get" action="/place/subscribe">
+	<input type="submit" value="subscribe"/>
+</form>
+	<br/>Place Trust Factor:	<div id="placeTrustFactor"></div>
+	<br/>Pendign Posts:	<div id="pendingPosts"></div>
+	<br/>Pending Comments:	<div id="pendingComments"></div>
+	<br/>Post Trust Factor:	<div id="postTrustFactor"></div>
+</body>
+</html>
